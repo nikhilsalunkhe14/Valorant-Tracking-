@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}{{ agent.name if agent else 'Agent' }} - Agent Details{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="glass" style="display:flex;gap:24px;align-items:center;">
+        {% if agent %}
+        <div style="width:260px;flex-shrink:0;">
+            <img src="{{ agent.image }}" alt="{{ agent.name }}" style="width:100%;border-radius:16px;" onerror="this.style.display='none'">
+        </div>
+        <div style="flex:1;">
+            <h2 style="font-family:'Rajdhani',sans-serif;font-size:32px;color:var(--valo-gold);">{{ agent.name }}</h2>
+            <div style="color:var(--dark-text-muted);margin-bottom:12px;font-weight:700;">Role: {{ agent.role }}</div>
+            <p style="color:var(--dark-text-muted);line-height:1.6;">{{ agent.description }}</p>
+
+            <h4 style="color:var(--valo-cyan);margin-top:18px;">Abilities</h4>
+            <ul style="color:var(--dark-text);list-style:none;padding:0;margin:8px 0 0 0;display:flex;gap:8px;flex-wrap:wrap;">
+                {% for ab in agent.abilities %}
+                <li style="background:rgba(255,255,255,0.03);padding:8px 12px;border-radius:10px;font-weight:700;color:var(--valo-light);">{{ ab }}</li>
+                {% endfor %}
+            </ul>
+
+            <div style="margin-top:18px;display:flex;gap:18px;align-items:center;">
+                <div style="background:var(--glass-bg);padding:12px;border-radius:12px;">
+                    <div style="font-size:12px;color:var(--dark-text-muted);">Matches</div>
+                    <div style="font-weight:800;color:var(--valo-cyan);font-size:20px;">{{ stats.matches }}</div>
+                </div>
+                <div style="background:var(--glass-bg);padding:12px;border-radius:12px;">
+                    <div style="font-size:12px;color:var(--dark-text-muted);">Avg ACS</div>
+                    <div style="font-weight:800;color:var(--valo-gold);font-size:20px;">{{ stats.avg_acs if stats.avg_acs is not none else '-' }}</div>
+                </div>
+            </div>
+
+            <h4 style="color:var(--valo-gold);margin-top:22px;">Top Players on {{ agent.name }}</h4>
+            <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;">
+                {% for pname, cnt in stats.top_players.items() %}
+                <a class="player-tag" href="/" style="text-decoration:none;">{{ pname }} ({{ cnt }})</a>
+                {% endfor %}
+            </div>
+        {% else %}
+        <div style="padding:40px;text-align:center;">
+            <h2 style="color:var(--valo-red);">Agent not found</h2>
+            <p style="color:var(--dark-text-muted);">The requested agent could not be located.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
